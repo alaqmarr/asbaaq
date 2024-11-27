@@ -1,0 +1,123 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  USER
+  SUPERADMIN
+  WATCHER
+  PADHAWNAAR
+}
+
+model User {
+  id            String       @id
+  name          String?
+  ITS           String?      @unique
+  phone         String?
+  password      String?
+  email         String?
+  emailVerified DateTime?    @map("email_verified")
+  image         String?
+  role          UserRole     @default(USER)
+  accounts      Account[]
+  sabaqs        Sabaq[]      @relation("SabaqAdmins")
+  enrollments   Enrollment[]
+  attendance    Attendance[]
+
+  @@map("users")
+}
+
+model Account {
+  id                String  @id
+  userId            String  @map("user_id")
+  type              String
+  provider          String
+  providerAccountId String  @map("provider_account_id")
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+
+model Sabaq {
+  id                String       @id
+  name              String
+  nisaab            String
+  padhawnaar        String
+  time              String
+  total_sabaq       Int          @default(0)
+  total_enrollments Int          @default(0)
+  startTime         DateTime
+  endTime           DateTime
+  mode              String
+  admins            User[]       @relation("SabaqAdmins")
+  enrollments       Enrollment[]
+  attendance        Attendance[]
+  intimations       Intimation[]
+
+  @@map("sabaqs")
+}
+
+model Enrollment {
+  id      String
+  ITS     String
+  sabaqId String
+
+  user  User  @relation(fields: [ITS], references: [ITS])
+  sabaq Sabaq @relation(fields: [sabaqId], references: [id])
+
+  @@unique([ITS, sabaqId])
+  @@map("enrollments")
+}
+
+model Attendance {
+  id           String   @id @default(cuid())
+  sabaqId      String   @map("sabaq_id")
+  ITS          String
+  intimationId String?
+  status       String   @default("absent")
+  time         DateTime
+
+  user       User        @relation(fields: [ITS], references: [ITS])
+  sabaq      Sabaq       @relation(fields: [sabaqId], references: [id])
+  intimation Intimation? @relation(fields: [intimationId], references: [id])
+
+  @@map("attendances")
+}
+
+model Intimation {
+  id         String       @id @default(cuid())
+  sabaqId    String       @map("sabaq_id")
+  date       DateTime
+  attendance Attendance[]
+  acceptance Boolean      @default(false)
+  mode       String       @default("offline")
+  location   String?
+
+  sabaq Sabaq @relation(fields: [sabaqId], references: [id])
+
+  @@map("intimations")
+}
+
+model VerificationToken {
+  id      String   @id @default(cuid())
+  email   String
+  token   String   @unique
+  expires DateTime
+  
+  @@unique([email, token])
+}
