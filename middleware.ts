@@ -9,7 +9,7 @@ import {
   authRoutes,
   publicStart,
 } from "@/routes";
-export default auth((req) => {
+export default auth((req:any) => {
   const { nextUrl } = req;
   const isLoggedIn = !!req.auth;
   
