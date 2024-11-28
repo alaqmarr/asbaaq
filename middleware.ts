@@ -9,10 +9,9 @@ import {
   authRoutes,
   publicStart,
 } from "@/routes";
-export default auth((req:any) => {
+export default auth((req: any) => {
   const { nextUrl } = req;
   const isLoggedIn = !!req.auth;
-  
 
   const isApiRoute = nextUrl.pathname.startsWith(apiRoutes);
   const isPublicRoute = publicRoutes.includes(nextUrl.pathname);

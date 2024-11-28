@@ -43,6 +43,7 @@ export const {
     async session({ session, token }) {
       if (token.role && session.user) {
         session.user.role = token.role as UserRole;
+        session.user.id = token.id as string;
       }
       return session;
     },
@@ -52,6 +53,7 @@ export const {
       if (!user) return token;
 
       token.role = user.role;
+      token.id = user.id;
       return token;
     },
   },

@@ -54,20 +54,24 @@ model Account {
 }
 
 model Sabaq {
-  id                String       @id
+  id                String   @id
   name              String
   nisaab            String
-  padhawnaar        String
+  padhawnaarId      String
   time              String
-  total_sabaq       Int          @default(0)
-  total_enrollments Int          @default(0)
+  total_sabaq       Int      @default(0)
+  total_enrollments Int      @default(0)
+  admincount        Int      @default(0)
   startTime         DateTime
   endTime           DateTime
   mode              String
-  admins            User[]       @relation("SabaqAdmins")
-  enrollments       Enrollment[]
-  attendance        Attendance[]
-  intimations       Intimation[]
+
+  status      String       @default("active")
+  admins      User[]       @relation("SabaqAdmins")
+  padhawnaar  Padhawnaar   @relation(fields: [padhawnaarId], references: [id])
+  enrollments Enrollment[]
+  attendance  Attendance[]
+  intimations Intimation[]
 
   @@map("sabaqs")
 }
@@ -89,7 +93,7 @@ model Attendance {
   sabaqId      String   @map("sabaq_id")
   ITS          String
   intimationId String?
-  status       String   @default("absent")
+  status       String   @default("present")
   time         DateTime
 
   user       User        @relation(fields: [ITS], references: [ITS])
@@ -97,6 +101,20 @@ model Attendance {
   intimation Intimation? @relation(fields: [intimationId], references: [id])
 
   @@map("attendances")
+}
+
+model Padhawnaar {
+  id      String  @id
+  ITS     String
+  name    String
+  phone   String
+  email   String
+  address String
+  sabaqId String
+  sabaqs  Sabaq[]
+  image   String
+
+  @@map("padhawnaars")
 }
 
 model Intimation {
@@ -118,6 +136,15 @@ model VerificationToken {
   email   String
   token   String   @unique
   expires DateTime
-  
+
+  @@unique([email, token])
+}
+
+model PasswordResetToken {
+  id      String   @id @default(cuid())
+  email   String
+  token   String   @unique
+  expires DateTime
+
   @@unique([email, token])
 }
