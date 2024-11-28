@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   description: "Module for managing asbaaq and activities related to asbaaq.",
 };
 
-export const poppins =Poppins({
+const poppins =Poppins({
 subsets: ["latin"],
 weight: "500",
 })
