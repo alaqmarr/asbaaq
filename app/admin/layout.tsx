@@ -3,12 +3,21 @@ import localFont from "next/font/local";
 import "@/app/globals.css";
 import { auth } from "@/auth";
 import Error from "@/components/Error";
-import { Calendar, HomeIcon, InboxIcon, SearchIcon, SettingsIcon, ShieldXIcon } from "lucide-react";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
-import { AppSidebar } from "@/components/app-sidebar"
+import {
+  Calendar,
+  HomeIcon,
+  InboxIcon,
+  Plus,
+  SearchIcon,
+  SettingsIcon,
+  ShieldXIcon,
+} from "lucide-react";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppSidebar } from "@/components/app-sidebar";
 import AdminNav from "@/components/admin/AdminNav";
 import { cn } from "@/lib/utils";
 import { Poppins } from "next/font/google";
+import { Separator } from "@/components/ui/separator";
 
 const geistSans = localFont({
   src: "../fonts/GeistVF.woff",
@@ -26,10 +35,10 @@ export const metadata: Metadata = {
   description: "Module for managing asbaaq and activities related to asbaaq.",
 };
 
-const poppins =Poppins({
-subsets: ["latin"],
-weight: "500",
-})
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: "500",
+});
 export default async function AdminLayout({
   children,
 }: Readonly<{
@@ -68,57 +77,37 @@ export default async function AdminLayout({
     );
   }
 
-  // Menu items.
   const superAdmin = [
     {
-      title: "Home",
-      url: "#",
-      icon: <HomeIcon/>,
-    },
-    {
-      title: "Inbox",
-      url: "#",
-      icon: <InboxIcon/>,
-    },
-    {
-      title: "Calendar",
-      url: "#",
-      icon: <Calendar/>,
-    },
-    {
-      title: "Search",
-      url: "#",
-      icon: <SearchIcon/>,
-    },
-    {
-      title: "Settings",
-      url: "#",
-      icon: <SettingsIcon/>,
-    },
-  ]
-
+        title: "Create New Sabaq",
+        url: "/admin/s/new-sabaq",
+        icon: <Plus/>,
+    }
+  ];
 
   const admin = [
     {
-      title: "Home",
-      url: "#",
-      icon: <HomeIcon/>,
+        title: "Create New Sabaq",
+        url: "/admin/s/new-sabaq",
+        icon: <Plus/>,
     },
     {
       title: "Settings",
       url: "#",
-      icon: <SettingsIcon/>,
+      icon: <SettingsIcon />,
     },
-  ]
-  
+  ];
 
   return (
     <SidebarProvider>
-    <AppSidebar navItems={session.user.role === 'ADMIN' ? admin : superAdmin}/>
-    <main className={cn("w-full flex flex-col p-10", poppins.className)}>
-        <AdminNav/>
-      {children}
-    </main>
-  </SidebarProvider>
+      <AppSidebar
+        navItems={session.user.role === "ADMIN" ? admin : superAdmin}
+      />
+      <main className={cn("w-full flex flex-col", poppins.className)}>
+        <AdminNav />
+        <Separator className="bg-black" />
+        <div className="relative pt-16 h-full">{children}</div>
+      </main>
+    </SidebarProvider>
   );
 }

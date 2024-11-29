@@ -4,6 +4,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 
 import React from "react";
+import { getCompletedSabaq } from "@/actions/data-fetching";
 
 const Completed = async () => {
   const session = await auth();
@@ -17,15 +18,11 @@ const Completed = async () => {
   }
   const userId = session.user.id;
 
-  const sabaqs = await db.sabaq.findMany({
-    where: {
-      status: "Completed",
-    },
-  });
+  const sabaqs = await getCompletedSabaq();
 
   return (
     <div>
-      <ScrollArea className="h-72 w-[250px] rounded-md border isolate aspect-video bg-white/50 shadow-lg ring-1 ring-black/5">
+      <ScrollArea className="max-h-72 h-fit min-w-[300px] max-w-[90vw] rounded-md border isolate aspect-video bg-white/50 shadow-lg ring-1 ring-black/5">
         {sabaqs.length > 0 ? (
           sabaqs.map((sabaq) => {
             return (

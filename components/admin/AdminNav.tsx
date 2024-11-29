@@ -41,11 +41,11 @@ const AdminNav = async () => {
     return <h1>Loading...</h1>;
   }
   return (
-    <nav className="flex items-center justify-between">
-      <div>
-        <SidebarTrigger variant={"default"} />
+    <nav className="fixed top-0 left-0 z-50 w-full h-16 bg-blue-400 shadow-md flex items-center justify-between sm:px-5 md:px-5">
+      <div className="p-5">
+        <SidebarTrigger variant={"secondary"} />
       </div>
-      <div className="flex items-center align-middle gap-x-2">
+      <div className="flex p-5 items-center align-middle gap-x-2">
         <p>Hello, {session.user.name}.</p>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

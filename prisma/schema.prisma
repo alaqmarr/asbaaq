@@ -62,8 +62,9 @@ model Sabaq {
   total_sabaq       Int      @default(0)
   total_enrollments Int      @default(0)
   admincount        Int      @default(0)
-  startTime         DateTime
-  endTime           DateTime
+  startTime         String
+  startDate         String
+  endTime           String
   mode              String
 
   status      String       @default("active")
@@ -110,7 +111,6 @@ model Padhawnaar {
   phone   String
   email   String
   address String
-  sabaqId String
   sabaqs  Sabaq[]
   image   String
 

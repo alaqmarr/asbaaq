@@ -1,13 +1,9 @@
 import {
-  Calendar,
   ChevronUp,
-  Home,
-  Inbox,
-  Search,
-  Settings,
   User2,
 } from "lucide-react";
 
+import logo from "@/app/logo2.jpg"
 import {
   Sidebar,
   SidebarContent,
@@ -27,6 +23,8 @@ import {
 } from "./ui/dropdown-menu";
 import { auth, signOut } from "@/auth";
 import { Button } from "./ui/button";
+import Image from "next/image";
+import Link from "next/link";
 
 export async function AppSidebar({ navItems }: { navItems: Array<any> }) {
   const session = await auth();
@@ -35,9 +33,12 @@ export async function AppSidebar({ navItems }: { navItems: Array<any> }) {
   }
   return (
     <Sidebar>
-      <SidebarContent>
+      <SidebarContent className="lg:mt-16">
         <SidebarGroup>
-          <SidebarGroupLabel>Actions</SidebarGroupLabel>
+          <SidebarGroupLabel className="flex flex-row gap-x-3 mt-3">
+            <Image src={logo.src} alt="HSB Secunderabad" width={50} height={50} className="rounded-md"/>
+            HSB Secunderabad
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarGroup>
@@ -46,10 +47,10 @@ export async function AppSidebar({ navItems }: { navItems: Array<any> }) {
                   {navItems.map((navItem) => (
                     <SidebarMenuItem key={navItem.title}>
                       <SidebarMenuButton asChild>
-                        <a href={navItem.url}>
-                          {navItem.icon}
-                          <span>{navItem.title}</span>
-                        </a>
+                        <Link href={navItem.url}>
+                        {navItem.icon}
+                        <span>{navItem.title}</span>
+                        </Link>
                       </SidebarMenuButton>
                     </SidebarMenuItem>
                   ))}
